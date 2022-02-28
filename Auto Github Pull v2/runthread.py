@@ -4,6 +4,7 @@ import threading
 from functions import *
 from gitcheck import *
 import time
+
 """
 This intilizes a run thread
 it starts the object and then 
@@ -17,13 +18,13 @@ class runThread:
         self.home_folder: str = home_folder
         self.testing_folder_index: int = testing_folder_index
         self.run_thread = threading.Thread(target=self.run_file, daemon=False)
-        self.p = None
+        self.process = None
         self.ls_output: list[str] = os.popen("ls").read().split("\n")
       
     def run_file(self):
         folder_check(self.home_folder)
         os.chdir(self.folder_name)
-        self.p = subprocess.Popen(["python", self.runfile_name])
+        self.process = subprocess.Popen(["python", self.runfile_name])
         os.chdir("..")
 
     def updater(self): 
@@ -43,10 +44,10 @@ class runThread:
         self.run_thread.start()
 
     def stop_process(self):
-        if self.p is not None:
-            self.p.terminate()
+        if self.process is not None:
+            self.process.terminate()
 
     def restart_process(self):
-        if self.p is not None:
-            self.p.terminate()
+        if self.process is not None:
+            self.process.terminate()
         self.run_thread.start()
