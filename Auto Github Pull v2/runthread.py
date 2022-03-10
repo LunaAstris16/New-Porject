@@ -1,6 +1,7 @@
 import os
 import subprocess
 import threading
+from xmlrpc.client import boolean
 from functions import *
 from gitcheck import *
 import time
@@ -12,20 +13,22 @@ it starts the object and then
 
 class runThread:
 
-    def __init__(self, runfile_name: str, folder_name: str, home_folder: str, testing_folder_index: int):
+    def __init__(self, runfile_name: str, location_folder: str) -> None:
         self.runfile_name: str = runfile_name
-        self.folder_name: str = folder_name
-        self.home_folder: str = home_folder
-        self.testing_folder_index: int = testing_folder_index
+        self.location_folder: str = location_folder
+        self.home_folder: str = os.getcwd()
+        self.status = False
+        self.testing_folder_index: int = os.popen("ls").read().split("\n").index(location_folder)
         self.run_thread = threading.Thread(target=self.run_file, daemon=False)
         self.process = None
         self.ls_output: list[str] = os.popen("ls").read().split("\n")
       
     def run_file(self):
         folder_check(self.home_folder)
-        os.chdir(self.folder_name)
+        os.chdir(self.location_folder)
         self.process = subprocess.Popen(["python", self.runfile_name])
         os.chdir("..")
+        self.status = True
 
     def updater(self): 
         while True:
@@ -42,8 +45,10 @@ class runThread:
 
     def start_run_thread(self):
         self.run_thread.start()
+        self.status = True
 
     def stop_process(self):
+        self.status = False
         if self.process is not None:
             self.process.terminate()
 
@@ -51,3 +56,6 @@ class runThread:
         if self.process is not None:
             self.process.terminate()
         self.run_thread.start()
+    
+    def status_checker(self) -> boolean:
+        return self.status
