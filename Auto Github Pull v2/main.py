@@ -9,17 +9,9 @@ The User needs to create a Jason file that has all of the:
     location folder 
     update checker period
 
--The Click Library is going to be used for the user to be able to have a custom command
-    -The command will be:
-        github-checker --Jasonfile Name
-
 Then we are going to process through the jason file and start operations for every process that the user
 described in the jason file
 
 Then create then start the user terrminal process and run that on it's own thread
 
 """
-
-import click
-@click.command()
-@click.option('--jasonfile', prompt='What is the name of the Jason file', help='This is where you place the name of the jason file')

@@ -1,7 +1,6 @@
 import os
 import subprocess
 import threading
-from xmlrpc.client import boolean
 from functions import *
 from gitcheck import *
 import time
@@ -57,5 +56,5 @@ class runThread:
             self.process.terminate()
         self.run_thread.start()
     
-    def status_checker(self) -> boolean:
+    def status_checker(self):
         return self.status
